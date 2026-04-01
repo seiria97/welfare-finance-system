@@ -13,14 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCurrentNepaliDateDisplay();
 });
 
-// Navigation
 function showSection(sectionId, element) {
-  // 1. Hide all sections
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  // 2. Show target section
+  // Hide all sections
+  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+  
+  // Show chosen section
   document.getElementById(sectionId).classList.add('active');
   
-  // 3. Update active state on sidebar links
+  // Update sidebar active button
   document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
   if (element) {
     element.classList.add('active');
