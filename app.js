@@ -14,15 +14,17 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Navigation
-function showSection(sectionId) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById(sectionId).classList.add('active');
-    
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-
-    if (sectionId === 'dashboard') loadDashboard();
-    if (sectionId === 'members') loadMembers();
+function showSection(sectionId, element) {
+  // 1. Hide all sections
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  // 2. Show target section
+  document.getElementById(sectionId).classList.add('active');
+  
+  // 3. Update active state on sidebar links
+  document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+  if (element) {
+    element.classList.add('active');
+  }
 }
 
 // ============ DASHBOARD ============
