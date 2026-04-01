@@ -16,6 +16,7 @@
         <button class="nav-btn" onclick="showSection('members')">Members</button>
         <button class="nav-btn" onclick="showSection('records')">Records</button>
          <button class="nav-btn" onclick="showSection('loan')">Loan</button>
+        <button class="nav-btn" onclick="showSection('savings')">Savings</button>
       </div>
     </nav>
 
@@ -209,7 +210,78 @@
       </div>
     </section>
   </div>
+  //savings
+<section id="savings" class="section">
+  <div class="container">
+    <h2>Savings</h2>
 
+    <form id="savings-form" onsubmit="addSavings(event)">
+      
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="savings-name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Citizenship Number</label>
+        <input type="text" id="savings-citizenship" required>
+      </div>
+
+      <div class="form-group">
+        <label>Amount (₨)</label>
+        <input type="number" id="savings-amount" required>
+      </div>
+
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="savings-date" required>
+      </div>
+
+      <div class="form-group">
+        <label>Reason</label>
+        <input type="text" id="savings-reason">
+      </div>
+
+      <button type="submit" class="btn-primary">Add Savings</button>
+    </form>
+  </div>
+</section>
+//loan
+  <section id="loan" class="section">
+  <div class="container">
+    <h2>Loan Management</h2>
+
+    <form id="loan-form" onsubmit="addLoan(event)">
+      
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="loan-name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Citizenship Number</label>
+        <input type="text" id="loan-citizenship" required>
+      </div>
+
+      <div class="form-group">
+        <label>Amount (₨)</label>
+        <input type="number" id="loan-amount" required>
+      </div>
+
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="loan-date" required>
+      </div>
+
+      <div class="form-group">
+        <label>Reason</label>
+        <input type="text" id="loan-reason">
+      </div>
+
+      <button type="submit" class="btn-primary">Give Loan</button>
+    </form>
+  </div>
+</section>
   <!-- Modal for Edit Member -->
   <div id="editModal" class="modal">
     <div class="modal-content">
