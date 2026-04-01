@@ -1,7 +1,7 @@
 // 1. Setup the connection
 const supabaseUrl = 'https://pqocyfdmloudfeyfxdbu.supabase.co'; 
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxb2N5ZmRtbG91ZGZleWZ4ZGJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwMTQ1MDUsImV4cCI6MjA5MDU5MDUwNX0.yIHqIZD04jbC56vLerUh-qNT5YahW8lko6J56pvxHxs'; 
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const _supabase = supabase.createClient('https://pqocyfdmloudfeyfxdbu.supabase.co', 'sb_publishable_fOqmcBERGtsVqG8qvEO5kg_JaYpCN0R');
 
 let membersList = [];
 
