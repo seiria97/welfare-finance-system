@@ -178,7 +178,56 @@ async function deleteMember(id) {
         loadDashboard();
     }
 }
+async function addSavings(event) {
+    event.preventDefault();
 
+    const name = document.getElementById('savings-name').value;
+    const citizenship = document.getElementById('savings-citizenship').value;
+    const amount = parseFloat(document.getElementById('savings-amount').value);
+    const date = document.getElementById('savings-date').value;
+    const reason = document.getElementById('savings-reason').value;
+
+    const { error } = await _supabase
+        .from('savings')
+        .insert([{
+            name,
+            citizenship_number: citizenship,
+            amount,
+            date,
+            reason
+        }]);
+
+    if (error) {
+        alert("Error: " + error.message);
+    } else {
+        alert("Savings added!");
+    }
+}
+async function addLoan(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('loan-name').value;
+    const citizenship = document.getElementById('loan-citizenship').value;
+    const amount = parseFloat(document.getElementById('loan-amount').value);
+    const date = document.getElementById('loan-date').value;
+    const reason = document.getElementById('loan-reason').value;
+
+    const { error } = await _supabase
+        .from('loan')
+        .insert([{
+            name,
+            citizenship_number: citizenship,
+            amount,
+            date,
+            reason
+        }]);
+
+    if (error) {
+        alert("Error: " + error.message);
+    } else {
+        alert("Loan added!");
+    }
+}
 async function searchMembers() {
     const query = document.getElementById('search-input').value.trim();
     if (!query) {
