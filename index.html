@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welfare Finance Management System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div id="app">
+    <nav class="navbar">
+      <h1>💰 Welfare Finance Management System</h1>
+      <div class="nav-links">
+        <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
+        <button class="nav-btn" onclick="showSection('members')">Members</button>
+        <button class="nav-btn" onclick="showSection('records')">Records</button>
+      </div>
+    </nav>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="section active">
+      <div class="container">
+        <h2>Dashboard</h2>
+        <div id="current-date" class="current-date"></div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3>Total Members</h3>
+            <p class="stat-value" id="stat-members">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Total Savings</h3>
+            <p class="stat-value" id="stat-savings">₨ 0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Total Loans</h3>
+            <p class="stat-value" id="stat-loans">₨ 0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Total Interest</h3>
+            <p class="stat-value" id="stat-interest">₨ 0</p>
+          </div>
+        </div>
+
+        <div class="alerts-section">
+          <h3>⚠️ Members with Unpaid Loans</h3>
+          <div id="unpaid-loans-list" class="list-container"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Members Section -->
+    <section id="members" class="section">
+      <div class="container">
+        <h2>Member Management</h2>
+        
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="Search by name or citizenship number...">
+          <button onclick="searchMembers()">Search</button>
+          <button onclick="resetSearch()" class="btn-secondary">Reset</button>
+        </div>
+
+        <div class="form-section">
+          <h3>Add New Member</h3>
+          <form id="member-form" onsubmit="addMember(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="member-name" required>
+              </div>
+              <div class="form-group">
+                <label>Citizenship Number *</label>
+                <input type="text" id="member-citizenship" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Address</label>
+                <input type="text" id="member-address">
+              </div>
+              <div class="form-group">
+                <label>Entry Fee (₨)</label>
+                <input type="number" id="member-fee" min="0" step="0.01">
+              </div>
+            </div>
+            <button type="submit" class="btn-primary">Add Member</button>
+          </form>
+        </div>
+
+        <div class="members-list-section">
+          <h3>Members List</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Citizenship</th>
+                <th>Address</th>
+                <th>Entry Fee</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="members-list">
+              <tr><td colspan="5" class="text-center">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Records Section -->
+    <section id="records" class="section">
+      <div class="container">
+        <h2>Financial Records</h2>
+        
+        <div class="filters">
+          <div class="form-group">
+            <label>Select Member *</label>
+            <select id="record-member" onchange="loadMemberRecords()">
+              <option value="">-- Select Member --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Nepali Year *</label>
+            <input type="number" id="record-year" min="2000" max="2150" placeholder="e.g., 2082">
+          </div>
+          <div class="form-group">
+            <label>Nepali Month *</label>
+            <select id="record-month">
+              <option value="">-- Select Month --</option>
+            </select>
+          </div>
+          <button onclick="loadMemberRecords()" class="btn-primary">Load Records</button>
+        </div>
+
+        <div id="records-display" class="records-display" style="display: none;">
+          <h3 id="record-header"></h3>
+          
+          <div class="form-section">
+            <h3>Financial Data for Month</h3>
+            <form id="record-form" onsubmit="saveRecord(event)">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Monthly Savings (₨)</label>
+                  <input type="number" id="record-savings" min="0" step="0.01" value="0">
+                </div>
+                <div class="form-group">
+                  <label>Interest Rate (%)</label>
+                  <input type="number" id="record-interest-rate" min="0" step="0.1" value="0">
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Loan Taken (₨)</label>
+                  <input type="number" id="record-loan-taken" min="0" step="0.01" value="0">
+                </div>
+                <div class="form-group">
+                  <label>Late Fee (₨)</label>
+                  <input type="number" id="record-late-fee" min="0" step="0.01" value="0">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Notes</label>
+                <textarea id="record-notes" rows="3"></textarea>
+              </div>
+
+              <button type="submit" class="btn-primary">Save Record</button>
+            </form>
+          </div>
+
+          <div class="record-summary">
+            <h3>Summary</h3>
+            <div class="summary-grid">
+              <div class="summary-item">
+                <span>Loan Balance:</span>
+                <strong id="summary-loan-balance">₨ 0</strong>
+              </div>
+              <div class="summary-item">
+                <span>Monthly Interest:</span>
+                <strong id="summary-interest">₨ 0</strong>
+              </div>
+              <div class="summary-item">
+                <span>Total Interest:</span>
+                <strong id="summary-total-interest">₨ 0</strong>
+              </div>
+              <div class="summary-item">
+                <span>Service Charge:</span>
+                <strong id="summary-service-charge">₨ 0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Record Loan Repayment</h3>
+            <form id="repayment-form" onsubmit="recordRepayment(event)">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Repayment Amount (₨)</label>
+                  <input type="number" id="repayment-amount" min="0" step="0.01" required>
+                </div>
+                <button type="submit" class="btn-primary">Record Repayment</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal for Edit Member -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Edit Member</h2>
+      <form id="edit-form" onsubmit="updateMember(event)">
+        <input type="hidden" id="edit-member-id">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="edit-member-name" required>
+        </div>
+        <div class="form-group">
+          <label>Citizenship Number *</label>
+          <input type="text" id="edit-member-citizenship" required>
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <input type="text" id="edit-member-address">
+        </div>
+        <div class="form-group">
+          <label>Entry Fee (₨)</label>
+          <input type="number" id="edit-member-fee" min="0" step="0.01">
+        </div>
+        <button type="submit" class="btn-primary">Update Member</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
