@@ -1,7 +1,7 @@
 // 1. Setup the connection
 const supabaseUrl = 'https://pqocyfdmloudfeyfxdbu.supabase.co'; 
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxb2N5ZmRtbG91ZGZleWZ4ZGJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwMTQ1MDUsImV4cCI6MjA5MDU5MDUwNX0.yIHqIZD04jbC56vLerUh-qNT5YahW8lko6J56pvxHxs'; 
-const _supabase = supabase.createClient('https://pqocyfdmloudfeyfxdbu.supabase.co', 'sb_publishable_fOqmcBERGtsVqG8qvEO5kg_JaYpCN0R');
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 let membersList = [];
 
@@ -13,18 +13,32 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCurrentNepaliDateDisplay();
 });
 
+// Toggle Section Display
 function showSection(sectionId, element) {
-  // Hide all sections
-  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-  
-  // Show chosen section
-  document.getElementById(sectionId).classList.add('active');
-  
-  // Update sidebar active button
-  document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-  if (element) {
-    element.classList.add('active');
-  }
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+    
+    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    if (element) {
+        // If the element clicked is inside a dropdown, highlight the parent dropdown-container
+        const parentNav = element.closest('.dropdown-container') || element;
+        parentNav.classList.add('active');
+    }
+}
+
+// Logic to hide/show Entry Fee based on Member Type
+function toggleEntryFeeGroup() {
+    const memberType = document.getElementById('member-type').value;
+    const feeGroup = document.getElementById('entry-fee-group');
+    const feeInput = document.getElementById('member-fee');
+    
+    if (memberType === 'old') {
+        feeGroup.style.display = 'none';
+        feeInput.value = 0;
+    } else {
+        feeGroup.style.display = 'block';
+        feeInput.value = 500; // Default new member fee
+    }
 }
 
 // ============ DASHBOARD ============
@@ -36,12 +50,13 @@ async function loadDashboard() {
 
         if (error) throw error;
 
-        // Update Stats
-        document.getElementById('stat-members').textContent = count || 0;
+        // Ensure these IDs exist in your HTML dashboard stats
+        if(document.getElementById('stat-members')) document.getElementById('stat-members').textContent = count || 0;
         
-        // Calculate Total Savings from Entry Fees
         const totalSavings = data.reduce((sum, member) => sum + (member.entry_fee || 0), 0);
-        document.getElementById('stat-savings').textContent = `₨ ${formatNumber(totalSavings)}`;
+        if(document.getElementById('stat-savings')) {
+            document.getElementById('stat-savings').textContent = `₨ ${formatNumber(totalSavings)}`;
+        }
 
         loadCurrentNepaliDateDisplay();
     } catch (error) {
@@ -62,8 +77,8 @@ function loadCurrentNepaliDateDisplay() {
                     'Kartik', 'Mangsir', 'Poush', 'Magh', 'Falgun', 'Chaitra'];
     
     const dateStr = `${months[nepaliMonth - 1]} ${nepaliYear} (BS)`;
-    const dateEl = document.getElementById('current-date');
-    if (dateEl) dateEl.textContent = `Current Nepali Date: ${dateStr}`;
+    const dateEl = document.getElementById('current-date-display');
+    if (dateEl) dateEl.textContent = dateStr;
 }
 
 // ============ MEMBERS ============
@@ -104,22 +119,23 @@ function displayMembers(members) {
     `).join('');
 }
 
-// Corrected Add Member Function to use Form Event
 async function addMember(event) {
     event.preventDefault();
     
     const name = document.getElementById('member-name').value;
+    const type = document.getElementById('member-type').value;
     const citizenship = document.getElementById('member-citizenship').value;
     const address = document.getElementById('member-address').value;
     const fee = parseFloat(document.getElementById('member-fee').value) || 0;
 
-    const { data, error } = await _supabase
+    const { error } = await _supabase
         .from('members')
         .insert([{ 
             name: name, 
             citizenship_number: citizenship, 
             address: address, 
-            entry_fee: fee 
+            entry_fee: fee,
+            member_type: type // Ensure this column exists in Supabase
         }]);
 
     if (error) {
@@ -132,57 +148,10 @@ async function addMember(event) {
     }
 }
 
-// Edit Modal Logic
-function editMemberModal(id) {
-    const member = membersList.find(m => m.id === id);
-    if (!member) return;
+// ============ TRANSACTIONS ============
 
-    document.getElementById('edit-member-id').value = member.id;
-    document.getElementById('edit-member-name').value = member.name;
-    document.getElementById('edit-member-citizenship').value = member.citizenship_number;
-    document.getElementById('edit-member-address').value = member.address;
-    document.getElementById('edit-member-fee').value = member.entry_fee;
-
-    document.getElementById('editModal').style.display = 'block';
-}
-
-async function updateMember(event) {
-    event.preventDefault();
-    const id = document.getElementById('edit-member-id').value;
-    
-    const updates = {
-        name: document.getElementById('edit-member-name').value,
-        citizenship_number: document.getElementById('edit-member-citizenship').value,
-        address: document.getElementById('edit-member-address').value,
-        entry_fee: parseFloat(document.getElementById('edit-member-fee').value) || 0
-    };
-
-    const { error } = await _supabase.from('members').update(updates).eq('id', id);
-
-    if (error) {
-        alert("Update failed: " + error.message);
-    } else {
-        alert("Member updated!");
-        closeModal();
-        loadMembers();
-    }
-}
-
-async function deleteMember(id) {
-    if (!confirm('Are you sure you want to delete this member?')) return;
-
-    const { error } = await _supabase.from('members').delete().eq('id', id);
-
-    if (error) {
-        alert("Delete failed: " + error.message);
-    } else {
-        loadMembers();
-        loadDashboard();
-    }
-}
 async function addSavings(event) {
     event.preventDefault();
-
     const name = document.getElementById('savings-name').value;
     const citizenship = document.getElementById('savings-citizenship').value;
     const amount = parseFloat(document.getElementById('savings-amount').value);
@@ -191,23 +160,35 @@ async function addSavings(event) {
 
     const { error } = await _supabase
         .from('savings')
-        .insert([{
-            name,
-            citizenship_number: citizenship,
-            amount,
-            date,
-            reason
-        }]);
+        .insert([{ name, citizenship_number: citizenship, amount, date, reason }]);
 
-    if (error) {
-        alert("Error: " + error.message);
-    } else {
-        alert("Savings added!");
+    if (error) alert("Error: " + error.message);
+    else {
+        alert("Savings deposited!");
+        document.getElementById('deposit-form').reset();
     }
 }
+
+async function withdrawSavings(event) {
+    event.preventDefault();
+    const name = document.getElementById('withdraw-name').value;
+    const citizenship = document.getElementById('withdraw-citizenship').value;
+    const amount = parseFloat(document.getElementById('withdraw-amount').value);
+    const date = document.getElementById('withdraw-date').value;
+
+    const { error } = await _supabase
+        .from('withdrawals')
+        .insert([{ name, citizenship_number: citizenship, amount, date }]);
+
+    if (error) alert("Error: " + error.message);
+    else {
+        alert("Withdrawal recorded!");
+        document.getElementById('withdraw-form').reset();
+    }
+}
+
 async function addLoan(event) {
     event.preventDefault();
-
     const name = document.getElementById('loan-name').value;
     const citizenship = document.getElementById('loan-citizenship').value;
     const amount = parseFloat(document.getElementById('loan-amount').value);
@@ -216,26 +197,38 @@ async function addLoan(event) {
 
     const { error } = await _supabase
         .from('loan')
-        .insert([{
-            name,
-            citizenship_number: citizenship,
-            amount,
-            date,
-            reason
-        }]);
+        .insert([{ name, citizenship_number: citizenship, amount, date, reason }]);
 
-    if (error) {
-        alert("Error: " + error.message);
-    } else {
-        alert("Loan added!");
+    if (error) alert("Error: " + error.message);
+    else {
+        alert("Loan disbursed!");
+        document.getElementById('loan-form').reset();
     }
 }
+
+async function repayLoan(event) {
+    event.preventDefault();
+    const name = document.getElementById('repay-name').value;
+    const citizenship = document.getElementById('repay-citizenship').value;
+    const amount = parseFloat(document.getElementById('repay-amount').value);
+    const date = document.getElementById('repay-date').value;
+
+    const { error } = await _supabase
+        .from('loan_repayments')
+        .insert([{ name, citizenship_number: citizenship, amount, date }]);
+
+    if (error) alert("Error: " + error.message);
+    else {
+        alert("Repayment recorded!");
+        document.getElementById('repay-form').reset();
+    }
+}
+
+// ============ UTILITIES ============
+
 async function searchMembers() {
     const query = document.getElementById('search-input').value.trim();
-    if (!query) {
-        loadMembers();
-        return;
-    }
+    if (!query) { loadMembers(); return; }
 
     const { data, error } = await _supabase
         .from('members')
@@ -248,11 +241,6 @@ async function searchMembers() {
 function resetSearch() {
     document.getElementById('search-input').value = '';
     loadMembers();
-}
-
-// ============ UTILITIES & MODAL ============
-function closeModal() {
-    document.getElementById('editModal').style.display = 'none';
 }
 
 function formatNumber(num) {
@@ -287,76 +275,7 @@ function populateMembersSelect() {
         select.appendChild(opt);
     });
 }
-.dropdown {
-  position: relative;
-}
 
-.dropdown-menu {
-  display: none;
-  flex-direction: column;
-  background: #34495e;
-  margin-left: 30px;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.dropdown-menu div {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.dropdown-menu div:hover {
-  background: #3d566e;
-}
-
-/* SHOW ON HOVER */
-.dropdown:hover .dropdown-menu {
-  display: flex;
-}
-async function withdrawSavings(event) {
-    event.preventDefault();
-
-    const name = document.getElementById('withdraw-name').value;
-    const citizenship = document.getElementById('withdraw-citizenship').value;
-    const amount = parseFloat(document.getElementById('withdraw-amount').value);
-    const date = document.getElementById('withdraw-date').value;
-
-    const { error } = await _supabase
-        .from('withdrawals')
-        .insert([{
-            name,
-            citizenship_number: citizenship,
-            amount,
-            date
-        }]);
-
-    if (error) {
-        alert("Error: " + error.message);
-    } else {
-        alert("Withdrawal recorded!");
-    }
-}
-
-async function repayLoan(event) {
-    event.preventDefault();
-
-    const name = document.getElementById('repay-name').value;
-    const citizenship = document.getElementById('repay-citizenship').value;
-    const amount = parseFloat(document.getElementById('repay-amount').value);
-    const date = document.getElementById('repay-date').value;
-
-    const { error } = await _supabase
-        .from('loan_repayments')
-        .insert([{
-            name,
-            citizenship_number: citizenship,
-            amount,
-            date
-        }]);
-
-    if (error) {
-        alert("Error: " + error.message);
-    } else {
-        alert("Repayment recorded!");
-    }
+function closeModal() {
+    document.getElementById('editModal').style.display = 'none';
 }
