@@ -287,3 +287,76 @@ function populateMembersSelect() {
         select.appendChild(opt);
     });
 }
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  flex-direction: column;
+  background: #34495e;
+  margin-left: 30px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.dropdown-menu div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdown-menu div:hover {
+  background: #3d566e;
+}
+
+/* SHOW ON HOVER */
+.dropdown:hover .dropdown-menu {
+  display: flex;
+}
+async function withdrawSavings(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('withdraw-name').value;
+    const citizenship = document.getElementById('withdraw-citizenship').value;
+    const amount = parseFloat(document.getElementById('withdraw-amount').value);
+    const date = document.getElementById('withdraw-date').value;
+
+    const { error } = await _supabase
+        .from('withdrawals')
+        .insert([{
+            name,
+            citizenship_number: citizenship,
+            amount,
+            date
+        }]);
+
+    if (error) {
+        alert("Error: " + error.message);
+    } else {
+        alert("Withdrawal recorded!");
+    }
+}
+
+async function repayLoan(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('repay-name').value;
+    const citizenship = document.getElementById('repay-citizenship').value;
+    const amount = parseFloat(document.getElementById('repay-amount').value);
+    const date = document.getElementById('repay-date').value;
+
+    const { error } = await _supabase
+        .from('loan_repayments')
+        .insert([{
+            name,
+            citizenship_number: citizenship,
+            amount,
+            date
+        }]);
+
+    if (error) {
+        alert("Error: " + error.message);
+    } else {
+        alert("Repayment recorded!");
+    }
+}
