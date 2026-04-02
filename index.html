@@ -42,14 +42,26 @@
     </a>
     
     <p class="sidebar-section-label">Transactions</p>
-    <a href="#" class="nav-item" onclick="showSection('loan', this)">
-      <i class="fa-solid fa-hand-holding-dollar nav-icon"></i>
-      Loan Management
-    </a>
-    <a href="#" class="nav-item" onclick="showSection('savings', this)">
-      <i class="fa-solid fa-piggy-bank nav-icon"></i>
-      Savings
-    </a>
+
+    <div class="nav-item dropdown-container">
+      <div class="nav-main">
+        <i class="fa-solid fa-piggy-bank nav-icon"></i> Savings
+      </div>
+      <div class="submenu">
+        <a href="#" onclick="showSection('deposit', this)">Deposit</a>
+        <a href="#" onclick="showSection('withdraw', this)">Withdrawal</a>
+      </div>
+    </div>
+
+    <div class="nav-item dropdown-container">
+      <div class="nav-main">
+        <i class="fa-solid fa-hand-holding-dollar nav-icon"></i> Loan Management
+      </div>
+      <div class="submenu">
+        <a href="#" onclick="showSection('giveLoan', this)">Give Loan</a>
+        <a href="#" onclick="showSection('repayment', this)">Repayment</a>
+      </div>
+    </div>
 
     <div class="sidebar-footer">
       v2.0.26 &copy; System
@@ -59,61 +71,48 @@
   <main class="main-wrapper">
     <div class="page-content">
 
-     <section id="dashboard" class="section active">
-  
-  <div class="profile-summary-card">
-    <div class="header-avatar" style="width: 55px; height: 55px; background: var(--kombu);">SA</div>
-    <div class="profile-info">
-      <h2 style="color: white; font-family: 'Cormorant Garamond', serif; letter-spacing: 1px;">SWIKRITI ADHIKARI</h2>
-      <p style="font-size: 0.8rem; opacity: 0.9;">WELFARE SAVINGS ACCOUNT</p>
-      <p style="font-size: 1.3rem; font-weight: 600; margin-top: 4px;">₨ 45,670.00</p>
-    </div>
-  </div>
-
-  <div class="dashboard-layout">
-    
-    <div class="graph-container">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h3 style="margin: 0; color: var(--kombu);">Account Activities</h3>
-        <span style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer;">
-           <i class="fa-solid fa-gear"></i> Budget Setup
-        </span>
-      </div>
-      <div id="chart-placeholder" style="height: 300px; background: #fdfdfc; border-radius: 15px; border: 1px solid var(--timberwolf-lt); display: flex; align-items: center; justify-content: center;">
-        <p style="color: var(--text-muted);">Graph Visualization</p>
-      </div>
-    </div>
-
-    <div class="activity-panel">
-      <h3 style="margin-bottom: 1.5rem; color: var(--kombu);">Recent History</h3>
-      <div class="activity-list" id="dashboard-activity-list">
-        <div class="activity-item" style="display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid var(--timberwolf-lt);">
-          <div>
-            <div style="font-weight: 600; font-size: 0.9rem;">Interest Credit</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">March 04, 2026</div>
+      <section id="dashboard" class="section active">
+        <div class="profile-summary-card">
+          <div class="header-avatar" style="width: 55px; height: 55px; background: var(--kombu);">BA</div>
+          <div class="profile-info">
+            <h2 style="color: white; font-family: 'Cormorant Garamond', serif; letter-spacing: 1px;">BIJAYA BABU ADHIKARI</h2>
+            <p style="font-size: 0.8rem; opacity: 0.9;">TEACHERS WELFARE FUND</p>
+            <p style="font-size: 1.3rem; font-weight: 600; margin-top: 4px;">ALPHA BOARDING SCHOOL</p>
           </div>
-          <div style="color: var(--palm-leaf); font-weight: 700;">+ ₨ 1,000</div>
         </div>
-      </div>
-    </div>
 
-  </div>
-</section>
+        <div class="dashboard-layout">
+          <div class="graph-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h3 style="margin: 0; color: var(--kombu);">Account Activities</h3>
+              <span style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer;">
+                 <i class="fa-solid fa-gear"></i> Budget Setup
+              </span>
+            </div>
+            <div id="chart-placeholder" style="height: 300px; background: #fdfdfc; border-radius: 15px; border: 1px solid var(--timberwolf-lt); display: flex; align-items: center; justify-content: center;">
+              <p style="color: var(--text-muted);">Graph Visualization</p>
+            </div>
+          </div>
+
+          <div class="activity-panel">
+            <h3 style="margin-bottom: 1.5rem; color: var(--kombu);">Recent History</h3>
+            <div class="activity-list" id="dashboard-activity-list">
+               </div>
+          </div>
+        </div>
+      </section>
 
       <section id="members" class="section">
-        <div class="page-heading">
-          <h2>Member Management</h2>
-        </div>
-        
+        <div class="page-heading"><h2>Member Management</h2></div>
         <div class="container">
           <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Search by name or citizenship number...">
+            <input type="text" id="search-input" placeholder="Search name or citizenship...">
             <button class="btn-primary" onclick="searchMembers()">Search</button>
             <button onclick="resetSearch()" class="btn-secondary">Reset</button>
           </div>
 
           <div class="form-section">
-            <h3><i class="fa-solid fa-user-plus"></i> Add New Member</h3>
+            <h3><i class="fa-solid fa-user-plus"></i> Add Member</h3>
             <form id="member-form" onsubmit="addMember(event)">
               <div class="form-row">
                 <div class="form-group">
@@ -121,19 +120,26 @@
                   <input type="text" id="member-name" required>
                 </div>
                 <div class="form-group">
-                  <label>Citizenship Number *</label>
-                  <input type="text" id="member-citizenship" required>
+                  <label>Member Type *</label>
+                  <select id="member-type" onchange="toggleEntryFeeGroup()" required>
+                    <option value="new">New Member</option>
+                    <option value="old">Existing (Old) Member</option>
+                  </select>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label>Address</label>
-                  <input type="text" id="member-address">
+                  <label>Citizenship Number *</label>
+                  <input type="text" id="member-citizenship" required>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="entry-fee-group">
                   <label>Entry Fee (₨)</label>
-                  <input type="number" id="member-fee" min="0" step="0.01">
+                  <input type="number" id="member-fee" value="0" min="0" step="0.01">
                 </div>
+              </div>
+              <div class="form-group">
+                <label>Address</label>
+                <input type="text" id="member-address">
               </div>
               <button type="submit" class="btn-primary">Add Member</button>
             </form>
@@ -160,9 +166,7 @@
       </section>
 
       <section id="records" class="section">
-        <div class="page-heading">
-          <h2>Financial Records</h2>
-        </div>
+        <div class="page-heading"><h2>Financial Records</h2></div>
         <div class="container">
           <div class="filters">
             <div class="form-group">
@@ -172,28 +176,24 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Nepali Year *</label>
-              <input type="number" id="record-year" min="2000" max="2150" placeholder="e.g., 2082">
+              <label>Year *</label>
+              <input type="number" id="record-year" placeholder="e.g., 2082">
             </div>
             <div class="form-group">
-              <label>Nepali Month *</label>
-              <select id="record-month">
-                <option value="">-- Select Month --</option>
-              </select>
+              <label>Month *</label>
+              <select id="record-month"></select>
             </div>
             <button onclick="loadMemberRecords()" class="btn-primary" style="align-self: flex-end; margin-bottom: 1.1rem;">Load Records</button>
           </div>
-
-          <div id="records-display" class="records-display" style="display: none;">
-             </div>
+          <div id="records-display" class="records-display" style="display: none;"></div>
         </div>
       </section>
 
-      <section id="savings" class="section">
-        <div class="page-heading"><h2>Savings</h2></div>
+      <section id="deposit" class="section">
+        <div class="page-heading"><h2>Deposit Savings</h2></div>
         <div class="container">
           <div class="form-section">
-            <form id="savings-form" onsubmit="addSavings(event)">
+            <form id="deposit-form" onsubmit="addSavings(event)">
               <div class="form-row">
                 <div class="form-group"><label>Name</label><input type="text" id="savings-name" required></div>
                 <div class="form-group"><label>Citizenship</label><input type="text" id="savings-citizenship" required></div>
@@ -202,15 +202,34 @@
                 <div class="form-group"><label>Amount (₨)</label><input type="number" id="savings-amount" required></div>
                 <div class="form-group"><label>Date</label><input type="date" id="savings-date" required></div>
               </div>
-              <div class="form-group"><label>Reason</label><input type="text" id="savings-reason"></div>
-              <button type="submit" class="btn-primary">Add Savings</button>
+              <div class="form-group"><label>Reason</label><input type="text" id="savings-reason" placeholder="Monthly contribution"></div>
+              <button type="submit" class="btn-primary">Confirm Deposit</button>
             </form>
           </div>
         </div>
       </section>
 
-      <section id="loan" class="section">
-        <div class="page-heading"><h2>Loan Management</h2></div>
+      <section id="withdraw" class="section">
+        <div class="page-heading"><h2>Withdraw Funds</h2></div>
+        <div class="container">
+          <div class="form-section">
+            <form id="withdraw-form" onsubmit="handleWithdrawal(event)">
+              <div class="form-row">
+                <div class="form-group"><label>Name</label><input type="text" id="withdraw-name" required></div>
+                <div class="form-group"><label>Citizenship</label><input type="text" id="withdraw-citizenship" required></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Withdrawal Amount (₨)</label><input type="number" id="withdraw-amount" required></div>
+                <div class="form-group"><label>Date</label><input type="date" id="withdraw-date" required></div>
+              </div>
+              <button type="submit" class="btn-primary" style="background: #e67e22;">Withdraw Money</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="giveLoan" class="section">
+        <div class="page-heading"><h2>Issue New Loan</h2></div>
         <div class="container">
           <div class="form-section">
             <form id="loan-form" onsubmit="addLoan(event)">
@@ -219,11 +238,30 @@
                 <div class="form-group"><label>Citizenship</label><input type="text" id="loan-citizenship" required></div>
               </div>
               <div class="form-row">
-                <div class="form-group"><label>Amount (₨)</label><input type="number" id="loan-amount" required></div>
+                <div class="form-group"><label>Principal Amount (₨)</label><input type="number" id="loan-amount" required></div>
                 <div class="form-group"><label>Date</label><input type="date" id="loan-date" required></div>
               </div>
-              <div class="form-group"><label>Reason</label><input type="text" id="loan-reason"></div>
-              <button type="submit" class="btn-primary">Give Loan</button>
+              <div class="form-group"><label>Loan Purpose</label><input type="text" id="loan-reason"></div>
+              <button type="submit" class="btn-primary">Disburse Loan</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="repayment" class="section">
+        <div class="page-heading"><h2>Loan Repayment</h2></div>
+        <div class="container">
+          <div class="form-section">
+            <form id="repay-form" onsubmit="handleRepayment(event)">
+              <div class="form-row">
+                <div class="form-group"><label>Member Name</label><input type="text" id="repay-name" required></div>
+                <div class="form-group"><label>Citizenship</label><input type="text" id="repay-citizenship" required></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Amount Paid (₨)</label><input type="number" id="repay-amount" required></div>
+                <div class="form-group"><label>Date</label><input type="date" id="repay-date" required></div>
+              </div>
+              <button type="submit" class="btn-primary" style="background: #27ae60;">Record Payment</button>
             </form>
           </div>
         </div>
@@ -235,7 +273,7 @@
   <div id="editModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <h2>Edit Member Information</h2>
+      <h2>Edit Member</h2>
       <form id="edit-form" onsubmit="updateMember(event)">
         <input type="hidden" id="edit-member-id">
         <div class="form-group">
