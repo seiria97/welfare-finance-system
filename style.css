@@ -222,3 +222,69 @@ input:focus {
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* ─── SIDEBAR HOVER LOGIC ──────────────────────── */
+.nav-item-dropdown {
+    position: relative;
+    cursor: pointer;
+}
+
+/* Submenu is hidden and slightly moved right */
+.submenu {
+    display: none;
+    flex-direction: column;
+    padding-left: 45px; /* Aligns text under the label, not the icon */
+    margin-bottom: 10px;
+}
+
+/* Only show when hovering over the container */
+.nav-item-dropdown:hover .submenu {
+    display: flex;
+}
+
+.submenu a {
+    font-size: 0.8rem;
+    color: #95a5a6; /* Lighter than main text */
+    text-decoration: none;
+    padding: 8px 0;
+    transition: 0.2s;
+    font-weight: 400;
+}
+
+.submenu a:hover {
+    color: var(--accent-gold); /* Professional gold highlight */
+}
+
+/* ─── DASHBOARD STATS GRID ─────────────────────── */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-bottom: 3px solid var(--accent-gold);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.stat-card h2 {
+    font-size: 1.4rem;
+    margin-top: 10px;
+    color: var(--primary-dark);
+}
+
+/* Remove Footer */
+.sidebar-footer {
+    display: none;
+}
