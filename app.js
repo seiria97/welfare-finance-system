@@ -120,8 +120,10 @@ function displayMembers(members) {
 }
 
 async function addMember(event) {
+    async function addMember(event) {
+    console.log("ADD MEMBER CLICKED");
     event.preventDefault();
-    
+    event.preventDefault();
     const name = document.getElementById('member-name').value;
     const type = document.getElementById('member-type').value;
     const citizenship = document.getElementById('member-citizenship').value;
