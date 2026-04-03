@@ -118,8 +118,6 @@ function displayMembers(members) {
         </tr>
     `).join('');
 }
-
-async function addMember(event) {
     async function addMember(event) {
     console.log("ADD MEMBER CLICKED");
     event.preventDefault();
