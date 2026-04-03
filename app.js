@@ -159,7 +159,7 @@ async function addSavings(event) {
     const reason = document.getElementById('savings-reason').value;
 
     const { error } = await _supabase
-        .from('savings')
+        .from('deposit')
         .insert([{ name, citizenship_number: citizenship, amount, date, reason }]);
 
     if (error) alert("Error: " + error.message);
@@ -177,7 +177,7 @@ async function withdrawSavings(event) {
     const date = document.getElementById('withdraw-date').value;
 
     const { error } = await _supabase
-        .from('withdrawals')
+        .from('withdraw')
         .insert([{ name, citizenship_number: citizenship, amount, date }]);
 
     if (error) alert("Error: " + error.message);
@@ -214,7 +214,7 @@ async function repayLoan(event) {
     const date = document.getElementById('repay-date').value;
 
     const { error } = await _supabase
-        .from('loan_repayments')
+        .from('loan repayments')
         .insert([{ name, citizenship_number: citizenship, amount, date }]);
 
     if (error) alert("Error: " + error.message);
